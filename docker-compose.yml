@@ -1,0 +1,85 @@
+# docker-compose.yml (root directory)
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:6.0
+    container_name: dost-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+      MONGO_INITDB_DATABASE: dost_workflow_db
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - dost-network
+
+  # Backend Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: dost-backend
+    restart: unless-stopped
+    ports:
+      - "3001:5000"
+    environment:
+      NODE_ENV: development
+      PORT: 5000
+      MONGO_URI: mongodb://host.docker.internal:27017/workflowdb
+      JWT_SECRET: your-super-secret-jwt-key-change-in-production
+      CORS_ORIGIN: "*"
+      FILE_UPLOAD_PATH: /usr/src/app/uploads
+    volumes:
+      # Mount source code for development (hot reload)
+      - ./backend:/usr/src/app
+      # Exclude node_modules to avoid conflicts
+      - /usr/src/app/node_modules
+      # Persist uploaded files
+      - backend_uploads:/usr/src/app/uploads
+    depends_on:
+      - mongodb
+    networks:
+      - dost-network
+    # Health check to ensure backend is ready
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend Service (Optional - you can also run this locally with npm start)
+  frontend:
+    build:
+      context: ./workflow-creator-frontend
+      dockerfile: Dockerfile
+    container_name: dost-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_API_BASE_URL: /api/v1
+      NODE_ENV: development
+    volumes:
+      # Mount source code for development
+      - ./workflow-creator-frontend:/usr/src/app
+      # Exclude node_modules
+      - /usr/src/app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - dost-network
+
+volumes:
+  mongodb_data:
+    driver: local
+  backend_uploads:
+    driver: local
+
+networks:
+  dost-network:
+    driver: bridge

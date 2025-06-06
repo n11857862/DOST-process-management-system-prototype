@@ -1,0 +1,43 @@
+{
+  "name": "dost-process-management-system-prototype",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "description": "DOST",
+  "main": "index.js",
+  "scripts": {
+    "server": "node backend/server.js",
+    "client": "npm run dev --prefix workflow-creator-frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://n11857862: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@github.com/n11857862/DOST-process-management-system-prototype.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/n11857862/DOST-process-management-system-prototype/issues"
+  },
+  "homepage": "https://github.com/n11857862/DOST-process-management-system-prototype#readme",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0"
+  },
+  "lint-staged": {
+    "packages/**/*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "http-proxy-middleware": "^3.0.5",
+    "react-toastify": "^11.0.5"
+  }
+}

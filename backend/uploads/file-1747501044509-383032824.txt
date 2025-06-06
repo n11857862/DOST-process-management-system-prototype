@@ -1,0 +1,8 @@
+Task Title: Submit Request
+Workflow: ste
+Instance ID: {{instanceId}}
+Status: In Progress
+Assigned To: Me
+
+Details:
+(e.g. Order ID: {{context.orderId}})

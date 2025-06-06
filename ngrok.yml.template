@@ -1,0 +1,41 @@
+# ngrok configuration file template
+# Copy this to ngrok.yml and update with your authtoken
+# Usage: ngrok start --all
+
+version: "2"
+authtoken: YOUR_AUTHTOKEN_HERE  # Get from https://dashboard.ngrok.com/get-started/your-authtoken
+
+tunnels:
+  # Frontend tunnel
+  dost-frontend:
+    addr: 3000
+    proto: http
+    # subdomain: dost-frontend  # Requires paid plan
+    # auth: "username:password"  # Optional basic auth
+    # bind_tls: true  # HTTPS only
+    
+  # Backend API tunnel  
+  dost-backend:
+    addr: 3001
+    proto: http
+    # subdomain: dost-backend  # Requires paid plan
+    # auth: "admin:secret"  # Optional basic auth
+    # bind_tls: true  # HTTPS only
+
+# Optional: Global settings
+# web_addr: localhost:4040  # ngrok dashboard
+# log_level: info
+# log_format: logfmt
+# log: /var/log/ngrok.log
+
+# Example with custom domain (paid plan)
+# tunnels:
+#   dost-app:
+#     addr: 3000
+#     proto: http
+#     hostname: dost.yourdomain.com
+#     
+#   dost-api:
+#     addr: 3001
+#     proto: http
+#     hostname: api.yourdomain.com 

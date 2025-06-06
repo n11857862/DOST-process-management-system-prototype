@@ -1,0 +1,9 @@
+version: "2"
+authtoken: YOUR_AUTHTOKEN_HERE  # Get this from https://dashboard.ngrok.com/get-started/your-authtoken
+tunnels:
+  dost-app:
+    proto: http
+    addr: 3003
+    host_header: localhost:3003
+    inspect: false
+    bind_tls: true 
